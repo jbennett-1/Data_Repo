@@ -1,8 +1,8 @@
 //THIS IS THE CLIENT SIDE
-#include <stdio.h> //driver recognizes
-#include <unistd.h> //driver recognizes
-#include <errno.h> //driver recognizes
-#include <stdlib.h> //driver recognizes
+#include <stdio.h> 
+#include <unistd.h> 
+#include <errno.h> 
+#include <stdlib.h> 
 #include <strings.h>
 #include <sys/un.h>
 #include <sys/stat.h>
@@ -21,17 +21,6 @@
 int len;
 char input_str[INPUT_SIZE];
 long sock_send;
-struct stat stat_buf;
-
-void check_data(int fd, char *input_str){
-    __uid_t uid = stat_buf.st_uid;
-    int i=0;
-    if(fd > 0) {
-	fstat(fd, &stat_buf);
-	perror("fstat"); 
-	printf("fstat=%d\n",uid);
-    }
-}
 
 int socket_send(struct sockaddr_in6 remote, int sd){
     char *c, *b;
@@ -51,9 +40,6 @@ int socket_send(struct sockaddr_in6 remote, int sd){
     
     // fgets only stops when no input is entered
     while(fgets(input_str, INPUT_SIZE, stdin),!feof(stdin)) { 
-	if(input_str) {
-	    check_data(sd, b);
-	}
 	sock_send=send(sd, input_str, strlen(input_str), 0); //0=no flags
 	if((c=strstr(input_str, "exit")) != NULL) { //closes when user types exit
 	    perror("Close");
@@ -87,7 +73,6 @@ int socket_init(){ //param = fd
     remote.sin6_flowinfo = 0;
     remote.sin6_port = htons(1084);
 
-    len = sizeof(struct sockaddr_in6);
     socket_send(remote, s);
     return 0;
 }
