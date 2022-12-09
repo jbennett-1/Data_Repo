@@ -57,10 +57,10 @@ int remote_socket_init(){
     server.sin6_family = AF_INET6;
     server.sin6_flowinfo = 0;
     server.sin6_port = htons(1084); //converts port number to big endian format format/network byte order
-    /* to check =  less /etc/services & ss -tulvn */
     server.sin6_addr = in6addr_any;
  
     len = sizeof(server); //size of struct sockaddr_in6                                                                                                      
+    
     if ((bind(s_o, (struct sockaddr*) &server, len)) == -1){ //connects sd s_o to address (&server)
 	perror("Bind");
 	return errno;
@@ -70,12 +70,6 @@ int remote_socket_init(){
 	perror("Listen");
 	return errno;
     }  
-
-    if ((name=getsockname(s_o, (struct sockaddr*) &server, &len)) == -1) {
-	perror("Getsockname");
-	return errno;
-    }
-    printf("sock name = %d\n", name);
 
     if ((client_s=accept(s_o, (struct sockaddr*) &remote, &t)) == -1){ //assign sd when accept connection from client
 	perror("Accept");
