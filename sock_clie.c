@@ -61,11 +61,6 @@ int socket_init(){ //param = fd
 	return errno;
     }
 
-    if((ff=fcntl(s, F_GETFL)) == -1) {//get file access mode 
-	perror("Fnctl");
-	exit(1);
-    }
-
     printf("Connecting to socket...\n");
 
     //initialize members and set len
